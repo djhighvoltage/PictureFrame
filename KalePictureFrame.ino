@@ -53,6 +53,7 @@ void setup() {
   mp3.sendCommand(CMD_SEL_DEV, 0, 2);   //select sd-card
   delay(500);             // wait for init
   Serial.println(Max);
+  randomSeed(analogRead(A0));
   
   MPR121.setFFI(FFI_10);
   MPR121.setSFI(SFI_10);
@@ -66,22 +67,11 @@ void setup() {
 // the loop function runs over and over again forever
 void loop() {
 
- MPR121.updateAll();
-
-  for (int i = 0; i < 12; i++) {
-    if (MPR121.isNewTouch(i)) {
-      Serial.print("electrode ");
-      Serial.print(i, DEC);
-      Serial.println(" was just touched");
-    } 
-    else if (MPR121.isNewRelease(i)) {
-      Serial.print("electrode ");
-      Serial.print(i, DEC);
-      Serial.println(" was just released");
-    }
-  }
-  //mp3.play(x);
+  MPR121.updateAll();
   
-  //x++;
-  delay(1000);
+  if (MPR121.isNewTouch(5)) {
+    mp3.play(random(1,Max+1));
+    delay(2000);
+  }
+
 }
